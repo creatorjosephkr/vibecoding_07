@@ -180,17 +180,17 @@
           <label class="form-label">데이터 모드 선택</label>
           <div class="mode-options">
             <label class="mode-radio-card">
-              <input type="radio" name="dataSourceMode" value="demo" checked>
+              <input type="radio" name="dataSourceMode" value="live" checked>
               <div class="mode-radio-content">
-                <strong>스마트 데모 모드 (권장)</strong>
-                <span>실제 시세 기반 실시간 시뮬레이션 및 과거 기간 데이터셋을 안정적으로 제공합니다. (API 호출 제한 없음)</span>
+                <strong>MetalpriceAPI 무료 플랜 연동 (실시간 시세)</strong>
+                <span>등록된 무료 API Key로 실시간 시세를 직접 연동합니다. 15분 스마트 캐시가 적용되어 월간 무료 호출 한도(50~100회)가 안전하게 보호됩니다.</span>
               </div>
             </label>
             <label class="mode-radio-card">
-              <input type="radio" name="dataSourceMode" value="live">
+              <input type="radio" name="dataSourceMode" value="demo">
               <div class="mode-radio-content">
-                <strong>MetalpriceAPI 직접 연동</strong>
-                <span>등록된 API Key를 통해 metalpriceapi.com 서버에서 실시간/기간별 시세를 직접 요청합니다.</span>
+                <strong>스마트 데모 모드 (키 미등록 시)</strong>
+                <span>API Key 없이도 실제 글로벌 시세 기준의 벤치마크 데이터를 통해 대시보드의 모든 기능을 원활하게 체험합니다.</span>
               </div>
             </label>
           </div>

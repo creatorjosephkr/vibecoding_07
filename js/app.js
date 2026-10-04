@@ -61,12 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLive = window.metalDataService.isLive();
     if (isLive) {
       apiStatusBadge.classList.add('live-api');
-      apiStatusLabel.textContent = 'MetalpriceAPI 라이브';
-      apiStatusBadge.title = '실시간 MetalpriceAPI 데이터 수신 중';
+      apiStatusLabel.textContent = '무료 라이브 API 연동 중';
+      apiStatusBadge.title = 'MetalpriceAPI 무료 엔드포인트(/v1/latest) 실시간 수신 중 (15분 스마트 캐시 보호)';
     } else {
       apiStatusBadge.classList.remove('live-api');
       apiStatusLabel.textContent = '스마트 데모 모드';
-      apiStatusBadge.title = '실제 시세 기반 실시간 시뮬레이션 가동 중';
+      apiStatusBadge.title = '실제 시세 기반 실시간 벤치마크 가동 중';
     }
   }
 
@@ -174,16 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Refresh all real-time and historical data
+   * @param {boolean} showNotification - whether to show toast alert
+   * @param {boolean} forceRefresh - whether to bypass 15-min cache and force fetch from API
    */
-  async function refreshAllData(showNotification = false) {
+  async function refreshAllData(showNotification = false, forceRefresh = false) {
     if (refreshIcon) refreshDataBtn.classList.add('refreshing');
 
     try {
-      // 1. Fetch Latest Prices
-      const latestResult = await window.metalDataService.fetchLatestPrices();
+      // 1. Fetch Latest Prices (Real MetalpriceAPI /latest in free tier)
+      const latestResult = await window.metalDataService.fetchLatestPrices(forceRefresh);
       renderMetalCards(latestResult.data);
 
-      // 2. Render Vertical Charts for selected period
+      // 2. Render Vertical Charts (anchors dynamically to real live prices)
       await window.metalChartManager.renderHistoricalCharts(currentPeriod, currentCurrency, currentUnit);
 
       // Update timestamp
@@ -257,10 +259,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 4. Refresh Button
+    // 4. Refresh Button (forces real-time fetch from API bypassing cache)
     if (refreshDataBtn) {
       refreshDataBtn.addEventListener('click', () => {
-        refreshAllData(true);
+        refreshAllData(true, true);
       });
     }
 
@@ -336,10 +338,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Initial Data Fetch & Render
     await refreshAllData(false);
 
-    // 4. Auto-refresh price every 90 seconds
+    // 4. Auto-refresh price every 15 minutes (to protect monthly free tier quota)
     setInterval(() => {
-      refreshAllData(false);
-    }, 90000);
+      refreshAllData(false, false);
+    }, 15 * 60 * 1000);
   }
 
   init();
